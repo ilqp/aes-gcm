@@ -31,24 +31,24 @@
 
 #include <stdio.h>
 #if !defined(MBEDTLS_CONFIG_FILE)
-#include "config.h"
+#include "mbedtls/config.h"
 #else
 #include MBEDTLS_CONFIG_FILE
 #endif
 
 #if defined(MBEDTLS_GCM_C)
 
-#include "gcm.h"
+#include "mbedtls/gcm.h"
 
-#include "utils.h"
+#include "mbedtls/utils.h"
 
 #if defined(MBEDTLS_AESNI_C)
-#include "aesni.h"
+#include "mbedtls/aesni.h"
 #endif
 
 #if defined(MBEDTLS_SELF_TEST) && defined(MBEDTLS_AES_C)
 #if defined(MBEDTLS_PLATFORM_C)
-#include "platform.h"
+#include "mbedtls/platform.h"
 #else
 #include <stdio.h>
 #define mbedtls_printf printf
@@ -168,15 +168,11 @@ int mbedtls_gcm_setkey( mbedtls_gcm_context *ctx,
     const mbedtls_cipher_info_t *cipher_info;
 
     cipher_info = mbedtls_cipher_info_from_values( cipher, keybits, MBEDTLS_MODE_ECB );
-    if( cipher_info == NULL ) {
-        printf("info bad\n"); 
+    if( cipher_info == NULL )
         return( MBEDTLS_ERR_GCM_BAD_INPUT );
-    }
 
-    if( cipher_info->block_size != 16 ) {
-        printf("block size off\n");
+    if( cipher_info->block_size != 16 )
         return( MBEDTLS_ERR_GCM_BAD_INPUT );
-    }
 
     mbedtls_cipher_free( &ctx->cipher_ctx );
 
@@ -285,7 +281,6 @@ int mbedtls_gcm_starts( mbedtls_gcm_context *ctx,
     if( ( (uint64_t) iv_len  ) >> 61 != 0 ||
         ( (uint64_t) add_len ) >> 61 != 0 )
     {
-        printf("bad input\n");
         return( MBEDTLS_ERR_GCM_BAD_INPUT );
     }
 
@@ -329,7 +324,6 @@ int mbedtls_gcm_starts( mbedtls_gcm_context *ctx,
     if( ( ret = mbedtls_cipher_update( &ctx->cipher_ctx, ctx->y, 16, ctx->base_ectr,
                              &olen ) ) != 0 )
     {
-        printf("close\n"); 
         return( ret );
     }
 
@@ -460,20 +454,14 @@ int mbedtls_gcm_crypt_and_tag( mbedtls_gcm_context *ctx,
 {
     int ret;
 
-    if( ( ret = mbedtls_gcm_starts( ctx, mode, iv, iv_len, add, add_len ) ) != 0 ) {
-        printf("one\n");
+    if( ( ret = mbedtls_gcm_starts( ctx, mode, iv, iv_len, add, add_len ) ) != 0 )
         return( ret );
-    }
 
-    if( ( ret = mbedtls_gcm_update( ctx, length, input, output ) ) != 0 ) {
-        printf("two\n");
+    if( ( ret = mbedtls_gcm_update( ctx, length, input, output ) ) != 0 )
         return( ret );
-    }
 
-    if( ( ret = mbedtls_gcm_finish( ctx, tag, tag_len ) ) != 0 ) {
-        printf("three\n");
+    if( ( ret = mbedtls_gcm_finish( ctx, tag, tag_len ) ) != 0 )
         return( ret );
-    }
 
     return( 0 );
 }
@@ -964,7 +952,3 @@ int mbedtls_gcm_self_test( int verbose )
 #endif /* MBEDTLS_SELF_TEST && MBEDTLS_AES_C */
 
 #endif /* MBEDTLS_GCM_C */
-/*int main(void) {*/
-    /*[>printf("hi");<]*/
-    /*return 0;*/
-/*}*/

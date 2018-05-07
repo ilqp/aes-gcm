@@ -25,24 +25,24 @@
 
 #include <stdio.h>
 #if !defined(MBEDTLS_CONFIG_FILE)
-#include "config.h"
+#include "mbedtls/config.h"
 #else
 #include MBEDTLS_CONFIG_FILE
 #endif
 
 #if defined(MBEDTLS_CIPHER_C)
 
-#include "cipher.h"
-#include "cipher_internal.h"
+#include "mbedtls/cipher.h"
+#include "mbedtls/cipher_internal.h"
 
-#include "utils.h"
+#include "mbedtls/utils.h"
 
 #if defined(MBEDTLS_GCM_C)
-#include "gcm.h"
+#include "mbedtls/gcm.h"
 #endif
 
 #if defined(MBEDTLS_CCM_C)
-#include "ccm.h"
+#include "mbedtls/ccm.h"
 #endif
 
 #if defined(MBEDTLS_ARC4_C) || defined(MBEDTLS_CIPHER_NULL_CIPHER)
@@ -108,12 +108,11 @@ const mbedtls_cipher_info_t *mbedtls_cipher_info_from_values( const mbedtls_ciph
 {
     const mbedtls_cipher_definition_t *def;
 
-    for( def = mbedtls_cipher_definitions; def->info != NULL; def++ ) {
+    for( def = mbedtls_cipher_definitions; def->info != NULL; def++ )
         if( def->info->base->cipher == cipher_id &&
             def->info->key_bitlen == (unsigned) key_bitlen &&
             def->info->mode == mode )
             return( def->info );
-    }
 
     return( NULL );
 }
@@ -256,7 +255,6 @@ int mbedtls_cipher_update( mbedtls_cipher_context_t *ctx, const unsigned char *i
 
     if( NULL == ctx || NULL == ctx->cipher_info || NULL == olen )
     {
-        printf("bad cipher_info!!");
         return( MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA );
     }
 
@@ -264,17 +262,14 @@ int mbedtls_cipher_update( mbedtls_cipher_context_t *ctx, const unsigned char *i
 
     if( ctx->cipher_info->mode == MBEDTLS_MODE_ECB )
     {
-        if( ilen != mbedtls_cipher_get_block_size( ctx ) ) {
-            printf("bb\n");
+        if( ilen != mbedtls_cipher_get_block_size( ctx ) )
             return( MBEDTLS_ERR_CIPHER_FULL_BLOCK_EXPECTED );
-        }
 
         *olen = ilen;
 
         if( 0 != ( ret = ctx->cipher_info->base->ecb_func( ctx->cipher_ctx,
                     ctx->operation, input, output ) ) )
         {
-            printf("cc\n");
             return( ret );
         }
 

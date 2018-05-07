@@ -23,38 +23,42 @@
  *  This file is part of mbed TLS (https://tls.mbed.org)
  */
 
-#include "config.h"
+#if !defined(MBEDTLS_CONFIG_FILE)
+#include "mbedtls/config.h"
+#else
+#include MBEDTLS_CONFIG_FILE
+#endif
 
 #if defined(MBEDTLS_CIPHER_C)
 
-#include "cipher_internal.h"
+#include "mbedtls/cipher_internal.h"
 
 #if defined(MBEDTLS_AES_C)
-#include "aes.h"
+#include "mbedtls/aes.h"
 #endif
 
 #if defined(MBEDTLS_ARC4_C)
-#include "arc4.h"
+#include "mbedtls/arc4.h"
 #endif
 
 #if defined(MBEDTLS_CAMELLIA_C)
-#include "camellia.h"
+#include "mbedtls/camellia.h"
 #endif
 
 #if defined(MBEDTLS_DES_C)
-#include "des.h"
+#include "mbedtls/des.h"
 #endif
 
 #if defined(MBEDTLS_BLOWFISH_C)
-#include "blowfish.h"
+#include "mbedtls/blowfish.h"
 #endif
 
 #if defined(MBEDTLS_GCM_C)
-#include "gcm.h"
+#include "mbedtls/gcm.h"
 #endif
 
 #if defined(MBEDTLS_CCM_C)
-#include "ccm.h"
+#include "mbedtls/ccm.h"
 #endif
 
 #if defined(MBEDTLS_CIPHER_NULL_CIPHER)
@@ -62,7 +66,7 @@
 #endif
 
 #if defined(MBEDTLS_PLATFORM_C)
-#include "platform.h"
+#include "mbedtls/platform.h"
 #endif
 
 static mbedtls_gcm_context gcm_ctx;
