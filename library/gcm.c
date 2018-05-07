@@ -39,7 +39,7 @@
 
 #include "mbedtls/gcm.h"
 
-#include "mbedtls/utils.h"
+#include <string.h>
 
 #if defined(MBEDTLS_AESNI_C)
 #include "mbedtls/aesni.h"
