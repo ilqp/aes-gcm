@@ -23,59 +23,61 @@
  *  This file is part of mbed TLS (https://tls.mbed.org)
  */
 
-#include "config.h"
+#if !defined(MBEDTLS_CONFIG_FILE)
+#include "mbedtls/config.h"
+#else
+#include MBEDTLS_CONFIG_FILE
+#endif
 
 #if defined(MBEDTLS_CIPHER_C)
 
-#include "cipher_internal.h"
+#include "mbedtls/cipher_internal.h"
 
 #if defined(MBEDTLS_AES_C)
-#include "aes.h"
+#include "mbedtls/aes.h"
 #endif
 
 #if defined(MBEDTLS_ARC4_C)
-#include "arc4.h"
+#include "mbedtls/arc4.h"
 #endif
 
 #if defined(MBEDTLS_CAMELLIA_C)
-#include "camellia.h"
+#include "mbedtls/camellia.h"
 #endif
 
 #if defined(MBEDTLS_DES_C)
-#include "des.h"
+#include "mbedtls/des.h"
 #endif
 
 #if defined(MBEDTLS_BLOWFISH_C)
-#include "blowfish.h"
+#include "mbedtls/blowfish.h"
 #endif
 
 #if defined(MBEDTLS_GCM_C)
-#include "gcm.h"
+#include "mbedtls/gcm.h"
 #endif
 
 #if defined(MBEDTLS_CCM_C)
-#include "ccm.h"
+#include "mbedtls/ccm.h"
 #endif
 
 #if defined(MBEDTLS_CIPHER_NULL_CIPHER)
-#include "utils.h"
+#include <string.h>
 #endif
 
 #if defined(MBEDTLS_PLATFORM_C)
-#include "platform.h"
-#endif
-
-static mbedtls_gcm_context gcm_ctx;
-static mbedtls_aes_context aes_ctx;
-#if defined(MBEDTLS_CCM_C)
-static mbedtls_ccm_context ccm_ctx;
+#include "mbedtls/platform.h"
+#else
+#include <stdlib.h>
+#define mbedtls_calloc    calloc
+#define mbedtls_free       free
 #endif
 
 #if defined(MBEDTLS_GCM_C)
 /* shared by all GCM ciphers */
 static void *gcm_ctx_alloc( void )
 {
-    void *ctx = &gcm_ctx;
+    void *ctx = mbedtls_calloc( 1, sizeof( mbedtls_gcm_context ) );
 
     if( ctx != NULL )
         mbedtls_gcm_init( (mbedtls_gcm_context *) ctx );
@@ -86,7 +88,7 @@ static void *gcm_ctx_alloc( void )
 static void gcm_ctx_free( void *ctx )
 {
     mbedtls_gcm_free( ctx );
-    /*mbedtls_free( ctx );*/
+    mbedtls_free( ctx );
 }
 #endif /* MBEDTLS_GCM_C */
 
@@ -94,7 +96,7 @@ static void gcm_ctx_free( void *ctx )
 /* shared by all CCM ciphers */
 static void *ccm_ctx_alloc( void )
 {
-    void *ctx = &ccm_ctx;
+    void *ctx = mbedtls_calloc( 1, sizeof( mbedtls_ccm_context ) );
 
     if( ctx != NULL )
         mbedtls_ccm_init( (mbedtls_ccm_context *) ctx );
@@ -105,7 +107,7 @@ static void *ccm_ctx_alloc( void )
 static void ccm_ctx_free( void *ctx )
 {
     mbedtls_ccm_free( ctx );
-    /*mbedtls_free( ctx );*/
+    mbedtls_free( ctx );
 }
 #endif /* MBEDTLS_CCM_C */
 
@@ -160,7 +162,7 @@ static int aes_setkey_enc_wrap( void *ctx, const unsigned char *key,
 
 static void * aes_ctx_alloc( void )
 {
-    mbedtls_aes_context *aes = &aes_ctx;
+    mbedtls_aes_context *aes = mbedtls_calloc( 1, sizeof( mbedtls_aes_context ) );
 
     if( aes == NULL )
         return( NULL );
@@ -173,7 +175,7 @@ static void * aes_ctx_alloc( void )
 static void aes_ctx_free( void *ctx )
 {
     mbedtls_aes_free( (mbedtls_aes_context *) ctx );
-    /*mbedtls_free( ctx );*/
+    mbedtls_free( ctx );
 }
 
 static const mbedtls_cipher_base_t aes_info = {

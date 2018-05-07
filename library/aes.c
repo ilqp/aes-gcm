@@ -26,26 +26,26 @@
  */
 
 #if !defined(MBEDTLS_CONFIG_FILE)
-#include "config.h"
+#include "mbedtls/config.h"
 #else
 #include MBEDTLS_CONFIG_FILE
 #endif
 
 #if defined(MBEDTLS_AES_C)
 
-#include "utils.h"
+#include <string.h>
 
-#include "aes.h"
+#include "mbedtls/aes.h"
 #if defined(MBEDTLS_PADLOCK_C)
-#include "padlock.h"
+#include "mbedtls/padlock.h"
 #endif
 #if defined(MBEDTLS_AESNI_C)
-#include "aesni.h"
+#include "mbedtls/aesni.h"
 #endif
 
 #if defined(MBEDTLS_SELF_TEST)
 #if defined(MBEDTLS_PLATFORM_C)
-#include "platform.h"
+#include "mbedtls/platform.h"
 #else
 #include <stdio.h>
 #define mbedtls_printf printf

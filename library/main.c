@@ -1,5 +1,5 @@
-#include "gcm.h"
-#include "utils.h"
+#include "mbedtls/gcm.h"
+#include <string.h>
 #include <stdio.h>
 
 static void single_encryption(void) {

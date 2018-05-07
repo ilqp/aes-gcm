@@ -1,13 +1,13 @@
 CC=gcc
-CFLAGS=-c -Wall
+CFLAGS=-c -Wall -Iinclude
 LDFLAGS=
-SOURCES=aes.c cipher.c cipher_wrap.c gcm.c main.c utils.c
+SOURCES=library/aes.c library/cipher.c library/cipher_wrap.c library/gcm.c library/main.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=out
 
 all: $(SOURCES) $(EXECUTABLE)
 
-$(EXECUTABLE): $(OBJECTS) 
+$(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
 .cpp.o:
